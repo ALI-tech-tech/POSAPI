@@ -12,7 +12,7 @@ trait ApiResponse {
                 'message' => __($message),
                 'data' => $data
             ],
-            status: $code,
+            status: 200,
         );
     }
 
@@ -24,7 +24,7 @@ trait ApiResponse {
                 'message' => __($message),
                 'data' => $data
             ],
-            status: $code,
+            status: 200,
         );
     }
 }
