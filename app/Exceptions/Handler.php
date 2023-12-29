@@ -32,6 +32,11 @@ class Handler extends ExceptionHandler
                     'meesage'=> 'Not Found'
                  ]);
             }
+            // else if ($e instanceof requestMethodNotAllowed) {
+        //         $this->failed_response(data: [
+        //            'meesage'=> 'Forbidden'
+        //         ]);
+        //    }
         });
     }
 }

@@ -8,6 +8,7 @@ use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
@@ -24,11 +25,16 @@ class AuthController extends Controller
 
         $user = User::whereEmail($request->email)->first();
         if(is_null($user)) {
-            return $this->failed_response(message: 'not_found');
+            return $this->failed_response(
+                data: [
+                "data"=>' هذا المستخدم غير موجود'
+            ], message:' not found');
         }
         
         if (!Hash::check($request->password, $user->password)) {
-            return $this->failed_response(message: 'invalid_credentials');
+            return $this->failed_response(data: [
+                "error"=>'البيانات المرسلة خاطئة'
+            ], message:'invalid_credentials');
         }
 
         $user->token = $user->createToken('api_token')->plainTextToken;
@@ -49,7 +55,17 @@ class AuthController extends Controller
 
     function logout()
     {
-        Auth::user()->tokens()->currentAccessToken()->delete();
+        
+
+        // Auth::user()->currentAccessToken()->delete();
+        if (Auth::check()) {
+            $token = Auth::user()->token();
+            $token->revoke();
+            return $this->sendResponse(null, 'User is logout');
+        } 
+        else{ 
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'] );
+        } 
     }
 
     function rules(Request $request)
