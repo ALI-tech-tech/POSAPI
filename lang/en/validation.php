@@ -186,6 +186,10 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        "name"=>'الاسم',
+        "price"=>'المبلغ',
+        
+    ],
 
 ];

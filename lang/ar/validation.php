@@ -1,5 +1,6 @@
 <?php
 return [
+    
     'accepted' => 'يجب قبول حقل :attribute.',
     'accepted_if' => 'يجب قبول حقل :attribute عندما يكون :other هو :value.',
     'active_url' => 'يجب أن يكون حقل :attribute عنوان URL صالحًا.',
@@ -145,4 +146,17 @@ return [
     'ulid' => 'يجب أن يكون حقل :attribute ULID صالحًا.',
     'uuid' => 'يجب أن يكون حقل :attribute UUID صالحًا.',
 
+
+
+    'attributes' => [
+        "name"=>'الاسم',
+        "price"=>'المبلغ',
+        "user_id"=>'رقم المستخدم',
+        "category_id"=>"رقم التصنيف",
+        "description"=>"الوصف",
+        "quantity"=>"الكمية"
+    ],
 ];
+
+
+
