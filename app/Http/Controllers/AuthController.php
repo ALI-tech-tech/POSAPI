@@ -57,15 +57,9 @@ class AuthController extends Controller
     {
         
 
-        // Auth::user()->currentAccessToken()->delete();
-        if (Auth::check()) {
-            $token = Auth::user()->token();
-            $token->revoke();
-            return $this->sendResponse(null, 'User is logout');
-        } 
-        else{ 
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'] );
-        } 
+        Auth::user()->currentAccessToken()->delete();
+        return $this->success_response(data: ["data"=>'']);
+         
     }
 
     function rules(Request $request)

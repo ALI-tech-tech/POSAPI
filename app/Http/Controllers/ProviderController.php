@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Provider;
 use Illuminate\Http\Request;
-use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Traits\ApiResponse;
 
-class CategoryController extends Controller
+
+class ProviderController extends Controller
 {
     use ApiResponse;
     /**
@@ -17,9 +18,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category= Auth::user()->categories;
+        $provigers= Auth::user()->providers;
        
-        return $this->success_response(data: $category);
+        return $this->success_response(data: $provigers);
     }
 
     /**
@@ -32,15 +33,15 @@ class CategoryController extends Controller
             return $this->failed_response(data: $validate->errors());
         }
         
-        $category=Auth::user()->categories()->create($request->all());
+        $provider=Auth::user()->providers()->create($request->all());
         
-        return $this->success_response(data: $category);
+        return $this->success_response(data: $provider);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Provider $provider)
     {
         //
     }
@@ -48,7 +49,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Provider $provider)
     {
         //
     }
@@ -56,7 +57,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Provider $provider)
     {
         //
     }
@@ -64,13 +65,16 @@ class CategoryController extends Controller
     function rules(Request $request)
     {
        
+        
         return Validator::make(
             $request->all(),
             [
-                
-                'name' =>  ['required',Rule::unique('categories','name')->where(function ($query) {
+                'name' =>    ['required',Rule::unique('providers','name')->where(function ($query) {
                     return $query->where('user_id', Auth::id());
                 })],
+                'address' => ['required', 'regex:/^[ء-ي\s\p{P}]+$/u'],
+                'phone' =>  'required|unique:providers,phone|numeric|digits:9',
+               
             ]
 
         );

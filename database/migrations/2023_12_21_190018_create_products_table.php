@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('provider_id')->constrained('providers');
             $table->string('name');
-            $table->decimal('price', 8, 2);
+            $table->decimal('buy', 8, 2);
+            $table->decimal('sell', 8, 2);
             $table->text('description')->nullable();
             $table->integer('quantity');
             $table->timestamps();

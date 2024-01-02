@@ -6,6 +6,17 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use App\Traits\ApiResponse;
+use Illuminate\Auth\AuthenticationException;
+
+/**
+ * Convert an authentication exception into an unauthenticated response.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  \Illuminate\Auth\AuthenticationException  $exception
+ * @return \Illuminate\Http\Response
+ */
+
+
 
 class Handler extends ExceptionHandler
 {
@@ -39,4 +50,17 @@ class Handler extends ExceptionHandler
         //    }
         });
     }
+    protected function unauthenticated($request, AuthenticationException $exception)
+{
+    if ($request->expectsJson()) {
+        return
+        $this->failed_response(data: [
+            'meesage'=> 'Unauthenticated'
+         ]);
+    }
+
+    return redirect()->guest(route('login'));
+}
+  
+
 }

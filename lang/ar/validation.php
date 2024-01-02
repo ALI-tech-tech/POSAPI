@@ -145,7 +145,7 @@ return [
     'url' => 'يجب أن يكون حقل :attribute رابطًا صالحًا.',
     'ulid' => 'يجب أن يكون حقل :attribute ULID صالحًا.',
     'uuid' => 'يجب أن يكون حقل :attribute UUID صالحًا.',
-
+    'Unauthenticated'=>'الرجاء تسجيل الدخول الى حسابك',
 
 
     'attributes' => [
@@ -154,7 +154,11 @@ return [
         "user_id"=>'رقم المستخدم',
         "category_id"=>"رقم التصنيف",
         "description"=>"الوصف",
-        "quantity"=>"الكمية"
+        "quantity"=>"الكمية",
+        "address"=>'العنوان',
+        "contact_number"=>'رقم التواصل',
+        "phone"=>'الهاتف',
+        "email"=>'البريد الالكتروني'
     ],
 ];
 

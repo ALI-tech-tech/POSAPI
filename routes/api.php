@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProviderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,9 +28,9 @@ Route::middleware(['localization'])->group(function () {
     Route::post('signup',[AuthController::class, 'signup'])->name('signup');
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('logout',[AuthController::class, 'logout']);
-        // Route::get('categories',[CategoryController::class, 'index']);
-        // Route::post('categories',[CategoryController::class, 'store']);
         Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('customers', CategoryController::class);
+        Route::apiResource('providers', ProviderController::class);
         Route::apiResource('products', ProductController::class);
     
     }

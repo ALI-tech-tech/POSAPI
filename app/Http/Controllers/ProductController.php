@@ -71,14 +71,16 @@ class ProductController extends Controller
         return Validator::make(
             $request->all(),
             [
-                'name' =>  ['required', 'regex:/^[ء-ي ]+$/u', Rule::unique('products')->where(function ($query) use ($request) {
+                'name' =>  ['required', Rule::unique('products')->where(function ($query) use ($request) {
                     return $query->where('category_id', $request->category_id)->where('name', $request->name);
                 })],
                 "category_id"=>['regex:/^[0-9]+$/u','exists:categories,id', Rule::unique('categories','name')->where(function ($query) {
                     return $query->where('user_id', Auth::id());
                 })],
-                "price"=>['regex:/^[0.0-9.0]+$/u'],
-                "description"=>['regex:/^[ء-ي ]+$/u'],
+                "provider_id"=>['required'],
+                "buy"=>['regex:/^[0.0-9.0]+$/u'],
+                "sell"=>['regex:/^[0.0-9.0]+$/u'],
+                "description"=>['required'],
                 "quantity"=>['regex:/^[0-9]+$/u']
             ]
 
