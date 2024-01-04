@@ -17,11 +17,13 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('provider_id')->constrained('providers');
             $table->string('name');
+            $table->string('barcode')->nullable();
             $table->decimal('buy', 8, 2);
             $table->decimal('sell', 8, 2);
             $table->text('description')->nullable();
             $table->integer('quantity');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

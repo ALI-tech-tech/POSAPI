@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +29,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['localization'])->group(function () {
     Route::post('login',[AuthController::class, 'login'])->name('login');
     Route::post('signup',[AuthController::class, 'signup'])->name('signup');
+    
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('logout',[AuthController::class, 'logout']);
         Route::apiResource('categories', CategoryController::class);
-        Route::apiResource('customers', CategoryController::class);
+        Route::apiResource('customers', CustomerController::class);
         Route::apiResource('providers', ProviderController::class);
         Route::apiResource('products', ProductController::class);
+        Route::apiResource('shops', ShopController::class);
     
     }
     );

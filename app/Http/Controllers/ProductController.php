@@ -77,6 +77,7 @@ class ProductController extends Controller
                 "category_id"=>['regex:/^[0-9]+$/u','exists:categories,id', Rule::unique('categories','name')->where(function ($query) {
                     return $query->where('user_id', Auth::id());
                 })],
+                
                 "provider_id"=>['required'],
                 "buy"=>['regex:/^[0.0-9.0]+$/u'],
                 "sell"=>['regex:/^[0.0-9.0]+$/u'],

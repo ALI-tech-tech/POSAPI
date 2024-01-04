@@ -42,6 +42,18 @@ class Handler extends ExceptionHandler
                  $this->failed_response(data: [
                     'meesage'=> 'Not Found'
                  ]);
+            } if ($e instanceof \Illuminate\Database\QueryException) {
+                dd($e->getMessage());
+                $this->failed_response(data: [
+                    'meesage'=> $e->getMessage(),
+                 ]);
+                //return response()->view('custom_view');
+            } elseif ($e instanceof \PDOException) {
+                dd($e->getMessage());
+                $this->failed_response(data: [
+                    'meesage'=> $e->getMessage(),
+                 ]);
+                //return response()->view('custom_view');
             }
             // else if ($e instanceof requestMethodNotAllowed) {
         //         $this->failed_response(data: [

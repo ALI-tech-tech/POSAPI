@@ -20,7 +20,8 @@ return new class extends Migration
             $table->date('invoice_date');
             $table->decimal('total_amount', 10, 2)->nullable();
             $table->timestamps();
-        });
+            $table->softDeletes();
+             });
     }
 
     /**
