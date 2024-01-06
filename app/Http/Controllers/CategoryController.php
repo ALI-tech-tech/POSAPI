@@ -34,7 +34,7 @@ class CategoryController extends Controller
         
         $category=Auth::user()->categories()->create($request->all());
         
-        return $this->success_response(data: $category);
+        return $this->success_response(data: $category,message:"AddSuccessful");
     }
 
     /**

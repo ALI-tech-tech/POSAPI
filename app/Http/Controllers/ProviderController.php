@@ -35,7 +35,7 @@ class ProviderController extends Controller
         
         $provider=Auth::user()->providers()->create($request->all());
         
-        return $this->success_response(data: $provider);
+        return $this->success_response(data: $provider,message:"AddSuccessful");
     }
 
     /**

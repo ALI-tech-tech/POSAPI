@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // Add more users as needed
+           
         ];
 
         DB::table('users')->insert($users);

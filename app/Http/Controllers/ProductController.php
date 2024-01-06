@@ -39,7 +39,7 @@ class ProductController extends Controller
         $product = $category->products()->create($request->all());
 
 
-        return $this->success_response(data: $product);
+        return $this->success_response(data: $product,message:"AddSuccessful");
     }
 
     /**

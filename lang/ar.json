@@ -1,4 +1,8 @@
 {
     "Successful":"تم بنجاح",
-    "Failed":"يوجد خطأ"
+    "AddSuccessful":"تمت الاضافة بنجاح",
+    "UpdateSuccessful":"تم التعديل بنجاح",
+    "DeleteSuccessful":"تم الحذف بنجاح",
+    "Failed":"يوجد خطأ",
+    "Not_found":"غير موجود"
 }

@@ -34,7 +34,7 @@ class CustomerController extends Controller
         
         $customers=Auth::user()->customers()->create($request->all());
         
-        return $this->success_response(data: $customers);
+        return $this->success_response(data: $customers,message:"AddSuccessful" );
     }
 
     /**

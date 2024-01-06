@@ -19,10 +19,12 @@ class ShopController extends Controller
     public function index()
     {
 
-        $userId = Auth::id();
-
-        $shop = Shops::where('user_id', $userId)->first();
-
+        $shop = Shops::where('user_id',  Auth::id())->first();
+        if ($shop == null) {
+            return $this->failed_response(data: null, message: "Not_found");
+        }
+        $imageUrl = asset('storage/uploads/' . $shop['image']);
+        $shop['image'] = $imageUrl;
         return $this->success_response(data: $shop);
     }
 
@@ -31,7 +33,10 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-
+        $validate = $this->rules($request);
+        if ($validate->fails()) {
+            return $this->failed_response(data: $validate->errors());
+        }
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
@@ -41,6 +46,7 @@ class ShopController extends Controller
             $imageName = null;
         }
 
+
         $shop = Shops::create([
             'name' => $request->input('name'),
             'image' => $imageName,
@@ -48,7 +54,7 @@ class ShopController extends Controller
             'user_id' => Auth::id(),
         ]);
         $shop['image_url'] = $imageUrl;
-        return $this->success_response(data: $shop);
+        return $this->success_response(data: $shop, message: "AddSuccessful");
     }
 
 
@@ -65,7 +71,34 @@ class ShopController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validate = $this->rules($request);
+        if ($validate->fails()) {
+            return $this->failed_response(data: $validate->errors());
+        }
+        $shop = Shops::findOrFail($id);
+        if ($shop == null) {
+            return $this->failed_response(data: null, message: "Not_found");
+        }
+        if ($shop->image) {
+            Storage::delete('public/uploads' . $shop->image);
+        }
+
+        $shop->name = $request->input('name');
+        $shop->address = $request->input('address');
+
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $shop->image = $imageName;
+        }
+
+
+        $shop->save();
+
+
+        return $this->success_response(data: $shop, message: "AddSuccessful");
     }
 
     /**
@@ -81,9 +114,11 @@ class ShopController extends Controller
         return Validator::make(
             $request->all(),
             [
-                'name' =>    ['required'],
-                'address' => ['required', 'regex:/^[ء-ي\s\p{P}]+$/u'],
-                'image' => 'image',
+
+                'name'    => 'required|string|max:255',
+                'address' => 'required|string',
+                
+
             ]
 
 
