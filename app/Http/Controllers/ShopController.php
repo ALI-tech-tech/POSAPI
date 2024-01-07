@@ -46,14 +46,14 @@ class ShopController extends Controller
             $imageName = null;
         }
 
-
-        $shop = Shops::create([
-            'name' => $request->input('name'),
-            'image' => $imageName,
-            'address' => $request->input('address'),
-            'user_id' => Auth::id(),
-        ]);
-        $shop['image_url'] = $imageUrl;
+        $shop = Auth::user()->shop()->create(array_merge($request->all(), ['image' => $imageName]));
+        // $shop = Shops::create([
+        //     'name' => $request->input('name'),
+        //     'image' => $imageName,
+        //     'address' => $request->input('address'),
+        //     'user_id' => Auth::id(),
+        // ]);
+        // $shop['image_url'] = $imageUrl;
         return $this->success_response(data: $shop, message: "AddSuccessful");
     }
 
@@ -79,20 +79,21 @@ class ShopController extends Controller
         if ($shop == null) {
             return $this->failed_response(data: null, message: "Not_found");
         }
-        if ($shop->image) {
-            Storage::delete('public/uploads' . $shop->image);
-        }
-
-        $shop->name = $request->input('name');
-        $shop->address = $request->input('address');
-
-
-        if ($request->hasFile('image')) {
+        $shop->name = $request->name;
+        $shop->address = $request->address;
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            if ((!is_null($shop->image)) ) {
+                // Storage::delete(storage_path()."/public/uploads/" . $shop->image);
+                // unlink(storage_path("app/public/upload/"). $shop->image);
+                unlink(storage_path()."/app/public/uploads/" . $shop->image);
+            }
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->storeAs('public/uploads', $imageName);
             $shop->image = $imageName;
-        }
+        } 
+
+     
 
 
         $shop->save();
