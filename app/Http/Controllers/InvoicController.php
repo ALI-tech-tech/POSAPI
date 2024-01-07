@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
-class CategoryController extends Controller
+class InvoicController extends Controller
 {
     use ApiResponse;
     /**
@@ -17,9 +15,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category= Auth::user()->categories;
+        $invoices= Auth::user()->invoices;
        
-        return $this->success_response(data: $category);
+        return $this->success_response(data: $invoices);
     }
 
     /**
@@ -31,10 +29,10 @@ class CategoryController extends Controller
         if ($validate->fails()) {
             return $this->failed_response(data: $validate->errors());
         }
+
+        $invoice=Auth::user()->invoices()->create($request->all());
         
-        $category=Auth::user()->categories()->create($request->all());
-        
-        return $this->success_response(data: $category,message:"AddSuccessful");
+        return $this->success_response(data: $invoice,message:"AddSuccessful");
     }
 
     /**
@@ -66,9 +64,9 @@ class CategoryController extends Controller
         return Validator::make(
             $request->all(),
             [           
-                'name' =>  ['required',Rule::unique('categories','name')->where(function ($query) {
-                    return $query->where('user_id', Auth::id());
-                })],
+                'customer_id' =>  ['required'],
+                'invoice_date'=>['required']
+               
             ]
         );
     }

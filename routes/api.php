@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoicController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\ShopController;
@@ -38,6 +39,8 @@ Route::middleware(['localization'])->group(function () {
         Route::apiResource('providers', ProviderController::class);
         Route::apiResource('products', ProductController::class);
         Route::apiResource('shops', ShopController::class);
+        Route::post('shops/info/{id}',[ShopController::class,'update']);
+        Route::apiResource('invoices', InvoicController::class);
         Route::apiResource('users', UserController::class)->except(["store","destroy"]);
     
     }
