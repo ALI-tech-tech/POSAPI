@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\InvoiceResource;
 use Illuminate\Validation\Rule;
-class InvoicController extends Controller
+use App\Http\Resources\InvoiceDetailsResource;
+class InvoiceDetailsController extends Controller
 {
     use ApiResponse;
     /**
@@ -16,10 +17,7 @@ class InvoicController extends Controller
      */
     public function index()
     {
-       
-        $invoices=  InvoiceResource::collection(Auth::user()->invoices);
-       
-        return $this->success_response(data: $invoices);
+            
     }
 
     /**
@@ -27,14 +25,12 @@ class InvoicController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $this->rules($request);
-        if ($validate->fails()) {
-            return $this->failed_response(data: $validate->errors());
-        }
-
-        $invoice=Auth::user()->invoices()->create($request->all());
-        
-        return $this->success_response(data: $invoice,message:"AddSuccessful");
+        $invoice=Auth::user()->invoices()->findOrFail($request->invoice_id);
+        $invoicedetails=$invoice->items()->create($request->all());
+        $total=$invoice->total_amount+($request->unit_price * $request->quantity);
+        $invoice->total_amount=$total;
+        $invoice->save();
+        return $this->success_response(data: $invoicedetails,message:"AddSuccessful");
     }
 
     /**
@@ -42,7 +38,9 @@ class InvoicController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $invoice=Invoice::findOrfail($id);
+        $details=InvoiceDetailsResource::collection( $invoice->items);
+        return $this->success_response(data: $details); 
     }
 
     /**
@@ -59,17 +57,5 @@ class InvoicController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    function rules(Request $request)
-    {
-        return Validator::make(
-            $request->all(),
-            [           
-                'customer_id' =>  ['required'],
-                
-               
-            ]
-        );
     }
 }

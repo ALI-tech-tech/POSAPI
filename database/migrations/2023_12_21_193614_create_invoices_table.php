@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers');
-            $table->date('invoice_date');
             $table->decimal('total_amount', 10, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
