@@ -5,8 +5,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InvoicController;
 use App\Http\Controllers\InvoiceDetailsController;
+use App\Http\Controllers\InvoicePDFController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -42,9 +44,12 @@ Route::middleware(['localization'])->group(function () {
         Route::apiResource('shops', ShopController::class);
         Route::post('shops/info/{id}',[ShopController::class,'update']);
         Route::apiResource('invoices', InvoicController::class);
-        Route::apiResource('invoicesdetails', InvoiceDetailsController::class);
+         Route::apiResource('invoicesdetails', InvoiceDetailsController::class);
         Route::apiResource('users', UserController::class)->except(["store","destroy"]);
-    
+        //Route::get('/invoicepdf', [ReportController::class,"generate_invoice"]);
+       
     }
     );
 });
+Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
+Route::apiResource('invoicesdetails', InvoiceDetailsController::class);
