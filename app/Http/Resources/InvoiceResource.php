@@ -25,6 +25,7 @@ class InvoiceResource extends JsonResource
             'total_amount'=> $this->total_amount??0.0,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'issave'=>$this->isSave,
             'items'=>InvoiceDetailsResource::collection(Invoice::findOrfail($this->id)->items)
         ];
     }

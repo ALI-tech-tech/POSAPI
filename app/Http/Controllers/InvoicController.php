@@ -7,7 +7,11 @@ use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\InvoiceResource;
+use App\Models\Invoice;
 use Illuminate\Validation\Rule;
+
+use function PHPUnit\Framework\isNull;
+
 class InvoicController extends Controller
 {
     use ApiResponse;
@@ -52,6 +56,18 @@ class InvoicController extends Controller
     {
         //
     }
+
+    public function save(string $id)
+    {
+        $invoice= Invoice::find($id); 
+        if (is_null($invoice)) {
+            return $this->failed_response(message:"Not_found" );
+        }
+        $invoice->isSave=true;  
+        $invoice->save();
+        return $this->success_response(data: $invoice,message:"UpdateSuccessful");
+    }
+
 
     /**
      * Remove the specified resource from storage.
