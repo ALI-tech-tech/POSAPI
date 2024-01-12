@@ -68,40 +68,31 @@ class ReportController extends Controller
         
 
     }
-    public function  generate_pdf() {
 
-        $data = [
-            'translation'=>[
-                'hello' => 'اهلا',
-                'welcome' => 'مرحبا',
-                'good' => 'جيد'
-                ]
-        ];
-        // Get the current date and time.
-        $dateTime = now();
+    public function generate_report(Request $request) {
+        if (is_null($request->customer_id)) {
+            return $this->failed_response(message:'NoDataSend');
+        }
+        if (!is_null($request->from) && is_null($request->to) ) {
+            $invoice=Customer::with(["invoices"=> function ($query)use($request) {
+                $query->where('created_at','like',$request->from.'%')->orderBy('created_at');
+            }])->find($request->customer_id);
+        }
+        elseif(!is_null($request->from) && !is_null($request->to) ) {
+            $invoice=Customer::with(["invoices"=> function ($query)use($request) {
+                $query->whereBetween("created_at",[$request->from,$request->to])->orderBy('created_at');
+            }])->find($request->customer_id);
+        }
+        else {
+            $invoice=Customer::with("invoices")->find($request->customer_id);
+        }
+        if (is_null($invoice)) {
+            return $this->failed_response(message:'NoDataSend');
+        }
 
-        // Generate a unique filename.
-        $fileName = $dateTime->format('YmdHis') . '_translation.pdf';
-
-        //Generate the pdf file
-        $pdf = PDF::loadView('pdf.translation', $data);
-
-
-        //return $pdf->stream( $filename);
-
-         //Save the pdf file in the public storage
-        $pdf->save( storage_path('app/public/'.$fileName));
-       
-
-       //Get the file url
-       
-        $urlToDownload =  Storage::disk('public')->url($fileName);
-
-
-        return response()->json([
-            'success' => true,
-            'url' => $urlToDownload,
-        ]);
+        return $this->success_response(data: $invoice);
     }
+
+    
     
 }
