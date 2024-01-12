@@ -4,5 +4,6 @@
     "UpdateSuccessful":"تم التعديل بنجاح",
     "DeleteSuccessful":"تم الحذف بنجاح",
     "Failed":"يوجد خطأ",
-    "Not_found":"غير موجود"
+    "Not_found":"غير موجود",
+    "NoDataSend":"لم ترسل بيانات"
 }

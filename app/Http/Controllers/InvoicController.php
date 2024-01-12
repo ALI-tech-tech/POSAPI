@@ -68,6 +68,36 @@ class InvoicController extends Controller
         return $this->success_response(data: $invoice,message:"UpdateSuccessful");
     }
 
+    public function search(Request $request) {
+        if (is_null($request->customer_id)) {
+            return $this->failed_response(message:'NoDataSend');
+        }
+        if (!is_null($request->from) && is_null($request->to) ) {
+            $invoice=InvoiceResource::collection( 
+                Invoice::where('customer_id','=',$request->customer_id)
+                ->where('created_at','like',$request->from.'%')
+                ->orderBy('created_at')->get());
+        }
+        elseif(!is_null($request->from) && !is_null($request->to) ) {
+            // $invoice=Invoice::where('customer_id','=',$request->customer_id)->where(["created_at"=> function ($query)use($request) {
+            //     $query->whereBetween("created_at",[$request->from,$request->to])->orderBy('created_at');
+            // }])->get();
+
+            $invoice=InvoiceResource::collection(
+                Invoice::where('customer_id','=',$request->customer_id)
+                ->whereBetween("created_at",[$request->from,$request->to])
+                ->orderBy('created_at')->get());
+        }
+        else {
+            $invoice=InvoiceResource::collection(Invoice::where('customer_id','=',$request->customer_id)->get());
+        }
+        if (is_null($invoice)) {
+            return $this->failed_response(message:'NoDataSend');
+        }
+
+        return $this->success_response(data: $invoice);
+   
+    }
 
     /**
      * Remove the specified resource from storage.
