@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -54,7 +54,34 @@ class User extends Authenticatable
     public function customers(){
         return $this->hasMany(Customer::class);
     }
+    public function products()
+    {
+        return $this->hasManyThrough( Products::class,Category::class, 'id', 'category_id');     
+    }
+    public function purchases()
+    {
+    
+        //----------------------------------------------------
+        // $userCategories = $this->categories()->pluck('id');
 
+        // $products = Products::whereIn('category_id', $userCategories)->with('purchases')->get();
+
+        // $purchases = collect();
+
+        // foreach ($products as $product) {
+        //     $purchases = $purchases->merge($product->purchases);
+        // }
+
+        // return $purchases;
+        //----------------------------------------------------
+        $userCategories = $this->categories()->pluck('id');
+
+        $products = Products::whereIn('category_id', $userCategories)->pluck('id');
+
+        return Purchase::whereIn('product_id', $products)->with('product')->get();
+   
+    }
+  
     public function shop(){
         return $this->hasOne(Shops::class,"user_id",'id');
     }
