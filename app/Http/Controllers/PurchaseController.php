@@ -6,7 +6,7 @@ use App\Models\Products;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
-
+use Illuminate\Support\Facades\Auth;
 class PurchaseController extends Controller
 {
     use ApiResponse;
@@ -15,7 +15,11 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        
+     
+         $user = Auth::user();
+         $purchases = $user->purchases();
+         return $this->success_response(data: $purchases);
+
     }
 
     /**
@@ -47,8 +51,11 @@ class PurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Purchase $purchase)
+    public function destroy(int $id)
     {
-        //
+        $purchase= Purchase::find($id);
+        $purchase->delete();
+        return $this->success_response(data: $purchase,message:"DeleteSuccessful");
+
     }
 }
