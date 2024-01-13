@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use Illuminate\Validation\Rule;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use function PHPUnit\Framework\isNull;
 
 class InvoicController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse,SoftDeletes;
     /**
      * Display a listing of the resource.
      */
@@ -104,7 +104,11 @@ class InvoicController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $invoice= Invoice::find($id);
+        $invoice->InvoiceItems()->delete();
+        $invoice->delete();
+        return $this->success_response(data: $invoice,message:"DeleteSuccessful");
+
     }
 
     function rules(Request $request)

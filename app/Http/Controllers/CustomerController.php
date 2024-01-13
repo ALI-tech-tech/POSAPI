@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Traits\ApiResponse;
-
 class CustomerController extends Controller
 {
     use ApiResponse;
@@ -56,9 +55,12 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer)
+    public function destroy(int $id)
     {
-        //
+        $customer= Customer::find($id);
+        $customer->delete();
+        return $this->success_response(data: $customer,message:"DeleteSuccessful");
+
     }
 
     function rules(Request $request)

@@ -8,7 +8,6 @@ use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
 class CategoryController extends Controller
 {
     use ApiResponse;
@@ -56,9 +55,13 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $category= Category::find($id);
+        $category->products()->delete();
+        $category->delete();
+        return $this->success_response(data: $category,message:"DeleteSuccessful");
+
     }
 
     function rules(Request $request)

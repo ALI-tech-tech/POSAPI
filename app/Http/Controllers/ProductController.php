@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class ProductController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse,SoftDeletes;
 
     /**
      * Display a listing of the resource.
@@ -63,7 +64,10 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product= Products::find($id);
+        $product->delete();
+        return $this->success_response(data: $product,message:"DeleteSuccessful");
+
     }
     function rules(Request $request)
     {

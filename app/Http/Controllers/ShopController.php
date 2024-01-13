@@ -47,13 +47,7 @@ class ShopController extends Controller
         }
 
         $shop = Auth::user()->shop()->create(array_merge($request->all(), ['image' => $imageName]));
-        // $shop = Shops::create([
-        //     'name' => $request->input('name'),
-        //     'image' => $imageName,
-        //     'address' => $request->input('address'),
-        //     'user_id' => Auth::id(),
-        // ]);
-        // $shop['image_url'] = $imageUrl;
+       
         return $this->success_response(data: $shop, message: "AddSuccessful");
     }
 

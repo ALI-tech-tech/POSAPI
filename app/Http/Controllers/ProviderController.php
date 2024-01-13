@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Traits\ApiResponse;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProviderController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse,SoftDeletes;
     /**
      * Display a listing of the resource.
      */
@@ -57,9 +57,12 @@ class ProviderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Provider $provider)
+    public function destroy(int $id)
     {
-        //
+        $provider= Provider::find($id);
+        $provider->delete();
+        return $this->success_response(data: $provider,message:"DeleteSuccessful");
+
     }
 
     function rules(Request $request)
