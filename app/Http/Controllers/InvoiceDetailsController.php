@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\InvoiceDetailsResource;
+use App\Models\Products;
+
 class InvoiceDetailsController extends Controller
 {
     use ApiResponse;
@@ -17,7 +19,7 @@ class InvoiceDetailsController extends Controller
      */
     public function index()
     {
-            
+               
     }
 
     /**
@@ -26,6 +28,11 @@ class InvoiceDetailsController extends Controller
     public function store(Request $request)
     {
         $invoice=Auth::user()->invoices()->findOrFail($request->invoice_id);
+        $product=Products::find($request->product_id);
+        if ( $product->quantity < $request->quantity) {
+            return $this->failed_response(message:"NotEnough");
+        }
+        $product->addseels($request->quantity);
         $invoicedetails=$invoice->items()->create($request->all());
         $total=$invoice->total_amount+($request->unit_price * $request->quantity);
         $invoice->total_amount=$total;
