@@ -20,4 +20,27 @@ class Products extends Model
         "description",
         "quantity"
     ];
+
+    public function addPurchase($quantity, $buy, $sell)
+    {
+        $this->quantity += $quantity;
+        $this->buy=$buy;
+        $this->sell=$sell;
+        $this->save();
+        
+        Purchase::create([
+            'product_id' => $this->id,
+            'quantity' => $quantity,
+            'buy' => $buy,
+            'sell'=>$sell
+        ]);
+    }
+    public function addseels($quantity)  {
+        $this->quantity -= $quantity;
+        $this->save();
+    }
+
+    public function purchases() {
+        return $this->hasMany(Purchase::class);
+    }
 }
