@@ -1,6 +1,7 @@
 {
     "Successful":"Successful Message",
     "Failed":"Failed Message",
-    "NoDataSend":"NoDataSend "
+    "NoDataSend":"NoDataSend ",
+    "NotEnough":"NotEnough"
 
 }

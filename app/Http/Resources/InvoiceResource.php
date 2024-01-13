@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Traits\ApiResponse;
 use App\Http\Resources\InvoiceDetailsResource;
+use Carbon\Carbon;
 
 class InvoiceResource extends JsonResource
 {
@@ -23,8 +24,8 @@ class InvoiceResource extends JsonResource
             'id' => $this->id,
             'customer'=>  Customer::find($this->customer_id),
             'total_amount'=> $this->total_amount??0.0,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d'),
+            'updated_at' => Carbon::parse($this->updated_at)->format('Y-m-d'),
             'issave'=>$this->isSave,
             'items'=>InvoiceDetailsResource::collection(Invoice::findOrfail($this->id)->items)
         ];

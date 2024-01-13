@@ -8,6 +8,7 @@ use App\Http\Controllers\InvoiceDetailsController;
 use App\Http\Controllers\InvoicePDFController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
@@ -41,6 +42,7 @@ Route::middleware(['localization'])->group(function () {
         Route::apiResource('customers', CustomerController::class);
         Route::apiResource('providers', ProviderController::class);
         Route::apiResource('products', ProductController::class);
+        Route::apiResource('purchaes', PurchaseController::class);
         Route::apiResource('shops', ShopController::class);
         Route::post('shops/info/{id}',[ShopController::class,'update']);
         Route::apiResource('invoices', InvoicController::class);

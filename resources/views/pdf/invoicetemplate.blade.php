@@ -8,7 +8,7 @@
     <td valign='top'><table width='100%' cellspacing='0' cellpadding='0'>
         <tr>
           <td valign='bottom' width='50%' height='50'><div align='left'>
-            {{-- <img src="{{ public_path('storage/uploads/'.$shop['shop']['image'])}}" style="width:80px;height:80px;" /> --}}
+            <img src="{{ public_path('storage/uploads/'.$shop['shop']['image'])}}" style="width:80px;height:80px;" />
             {{-- <img src="http://10.3.122.3:8000/storage/uploads/1704617681_Screenshot%20(7).png" style="width:80px;height:80px;" /> --}}
         </div><br /></td>
 
