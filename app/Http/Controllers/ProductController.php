@@ -22,6 +22,12 @@ class ProductController extends Controller
         return $this->success_response(data: $products);
     }
 
+    public function getproducts()
+    {
+        $user = Auth::user();
+        $products=$user->products;
+        return $this->success_response(data: $products);
+    }
     /**
      * Store a newly created resource in storage.
      */
