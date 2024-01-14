@@ -42,22 +42,23 @@ Route::middleware(['localization'])->group(function () {
         Route::apiResource('customers', CustomerController::class);
         Route::apiResource('providers', ProviderController::class);
         Route::apiResource('products', ProductController::class);
+        Route::get('aproducts', [ProductController::class,"getproducts"]);
         Route::apiResource('purchaes', PurchaseController::class);
         Route::apiResource('shops', ShopController::class);
         Route::post('shops/info/{id}',[ShopController::class,'update']);
         Route::apiResource('invoices', InvoicController::class);
         Route::post('invoices/search', [InvoicController::class,'search']);
         Route::put("saveinvoice/{id}",[InvoicController::class,'save']);
-         Route::apiResource('invoicesdetails', InvoiceDetailsController::class);
+        Route::apiResource('invoicesdetails', InvoiceDetailsController::class);
         Route::apiResource('users', UserController::class)->except(["store","destroy"]);
-        //Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
+        Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
 
         
        
     }
     );
 });
-Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
+// Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
 Route::get('/generate_report', [ReportController::class,"generate_report"]);
 
 
