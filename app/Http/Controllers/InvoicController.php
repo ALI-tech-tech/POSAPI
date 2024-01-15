@@ -105,7 +105,9 @@ class InvoicController extends Controller
     public function destroy(string $id)
     {
         $invoice= Invoice::find($id);
-        $invoice->InvoiceItems()->delete();
+        if (is_null($invoice->items())) {
+            $invoice->items()->delete();
+        }
         $invoice->delete();
         return $this->success_response(data: $invoice,message:"DeleteSuccessful");
 
