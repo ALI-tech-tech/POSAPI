@@ -8,10 +8,12 @@ use App\Http\Resources\InvoiceDetailsResource;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\ProductInvoice;
 use App\Models\Customer;
+use App\Models\Products;
 use App\Models\Shops;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use Storage;
 class ReportController extends Controller
@@ -35,12 +37,26 @@ class ReportController extends Controller
         // $shop= $user->load('shop');
         $shop=User::with('shop')->find(1);
         $invoice=InvoiceResource::make(Invoice::findOrfail($id));
-       $details=InvoiceDetailsResource::collection( $invoice->items);
-        $customer=Customer::find($invoice->customer_id);
+        // print_r($invoice->items);
+       $details= $invoice->items;
+    //    $details->load('product');
+    //    $productIds = $details->pluck('product_id')->unique()->toArray();
+    // $products = Products::whereIn('id', $productIds)->get();
+    //    print_r($products);
+    //    return $details;
+// return $invoice;
+$customer=Customer::find($invoice->customer_id);
+$content = DB::table('invoices')
+        ->select('invoices.*', 'invoice_items.*', 'products.*')
+        ->join('invoice_items', 'invoices.id', '=', 'invoice_items.invoice_id')
+        ->join('products', 'invoice_items.product_id', '=', 'products.id')
+        ->where('invoices.id', $id)
+        ->get();
+        // $customer=Customer::find($invoice->customer_id);
         // $shop=Shops::where('user_id','=',Auth::user()->id)->get();
         //$shop=Shops::where('user_id','=',1)->get();
         $total= $this->calculateTotal($details);
-    
+    // return $invoice;
     //return response()->json(compact('invoice','details','customer','total','shop'));
         // Get the current date and time.
         $dateTime = now();
@@ -51,7 +67,7 @@ class ReportController extends Controller
         
       
         // Generate the PDF file.
-       $pdf = PDF::loadView('pdf.invoicetemplate', compact('invoice','details','customer','total','shop'));
+      $pdf = PDF::loadView('pdf.invoicetemplate', compact('invoice','details','customer','total','shop','content'));
 
         // Save the PDF file in the public storage.
        $pdf->save(storage_path('app/public/pdf/' . $fileName));
@@ -63,7 +79,7 @@ class ReportController extends Controller
          return response()->download($filePath, $fileName)->deleteFileAfterSend(true);
          //return response()->json($data);
         //  return view('pdf.invoice')->with('invoice',$data);
-        // return view('pdf.invoicetemplate', compact('invoice','details','customer','total','shop'));
+        //  return view('pdf.invoicetemplate', compact('invoice','details','customer','total','shop','content'));
         //dd($invoice);
         
 
