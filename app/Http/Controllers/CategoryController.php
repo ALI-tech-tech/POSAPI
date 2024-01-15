@@ -41,15 +41,20 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $validate = $this->rules($request);
+        if ($validate->fails()) {
+            return $this->failed_response(data: $validate->errors());
+        }
+        $category= Category::find($id)->update($request->all());
+        return $this->success_response(data: $category,message:"UpdateSuccessful");
     }
 
     /**
