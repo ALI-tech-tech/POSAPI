@@ -58,7 +58,10 @@ class CustomerController extends Controller
     public function destroy(int $id)
     {
         $customer= Customer::find($id);
+        $customer->invoiceitems()->delete();
+        $customer->invoices()->delete();
         $customer->delete();
+        
         return $this->success_response(data: $customer,message:"DeleteSuccessful");
 
     }
