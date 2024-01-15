@@ -60,9 +60,17 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $validate = $this->rules($request);
+        if ($validate->fails()) {
+            return $this->failed_response(data: $validate->errors());
+        } 
+        $product= Products::find($id)->update($request->all());
+        return $this->success_response(data: $product,message:"UpdateSuccessful");
+
+
+
     }
 
     /**
