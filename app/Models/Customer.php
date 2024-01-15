@@ -19,4 +19,8 @@ class Customer extends Model
     public function invoices() {
         return $this->hasMany(Invoice::class);
     }
+    public function invoiceitems()
+    {
+        return $this->hasManyThrough( InvoiceItems::class, Invoice::class, 'customer_id','invoice_id','id','id');     
+    }
 }

@@ -50,12 +50,17 @@
   
         </tr>
       <tr style="display:none;"><td colspan="*"><tr>
-        @foreach ($invoice['items'] as $item )
-        <tr>
-            <td valign='top' style='font-size:12px;'>{{$item['product']['name']}} </td>
-            <td valign='top' style='font-size:12px;'>{{$item['quantity']}} </td>
-            <td valign='top' style='font-size:12px;'>{{$item['unit_price'] }} </td>
-            <td valign='top' style='font-size:12px;'>{{$item['quantity'] * $item['unit_price']}}</td>
+        {{-- @foreach ($invoice['items'] as $item ) --}}
+        @foreach ($content as $item )
+        {{-- {{dd($invoice['items'])}} --}}
+        {{-- {{dd($details['items'])}} --}}
+        
+        <tr>  
+            <td valign='top' style='font-size:12px;'>{{$item->name}} </td>
+            {{-- <td valign='top' style='font-size:12px;'>{{$products}} </td> --}}
+            <td valign='top' style='font-size:12px;'>{{$item->quantity}} </td>
+            <td valign='top' style='font-size:12px;'>{{$item->unit_price }} </td>
+            <td valign='top' style='font-size:12px;'>{{$item->quantity * $item->unit_price}}</td>
         </tr>
     @endforeach
 

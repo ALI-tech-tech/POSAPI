@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Throwable;
+
 class Products extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
 
     protected $fillable = [
@@ -24,25 +27,36 @@ class Products extends Model
     public function addPurchase($quantity, $buy, $sell)
     {
         $this->quantity += $quantity;
-        $this->buy=$buy;
-        $this->sell=$sell;
-        $this->save();
-        
-        Purchase::create([
-            'product_id' => $this->id,
-            'quantity' => $quantity,
-            'buy' => $buy,
-            'sell'=>$sell
-        ]);
+        $this->buy = $buy;
+        $this->sell = $sell;
 
-        
+        try {
+
+            DB::beginTransaction();
+
+            $this->save();
+
+            Purchase::create([
+                'product_id' => $this->id,
+                'quantity' => $quantity,
+                'buy' => $buy,
+                'sell' => $sell
+            ]);
+
+            DB::commit();
+        } catch (Throwable $e) {
+
+            DB::rollback();
+        }
     }
-    public function addseels($quantity)  {
+    public function addseels($quantity)
+    {
         $this->quantity -= $quantity;
         $this->save();
     }
-   
-    public function purchases() {
+
+    public function purchases()
+    {
         return $this->hasMany(Purchase::class);
     }
 }
