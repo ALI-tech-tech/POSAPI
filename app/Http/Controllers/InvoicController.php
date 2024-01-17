@@ -52,9 +52,10 @@ class InvoicController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $invoice= Invoice::find($id)->update($request->all());
+        return $this->success_response(data: $invoice,message:"UpdateSuccessful");
     }
 
     public function save(string $id)

@@ -32,10 +32,17 @@ class ReportController extends Controller
         return $total;
     }
     public function generate_invoice($id) {
-        //$shop=Auth::user()->with('shop')->first();
+        $user=Auth::user();
+        // return $user;
+        $shop=null;
+        if (!is_null($user) && !is_null($user->shop)) {
+            $shop=$user->shop;
+        }
+       
+        // return $user->shop;
         // $user = Auth::user();
         // $shop= $user->load('shop');
-        $shop=User::with('shop')->find(1);
+        // $shop=User::with('shop')->find(1);
         $invoice=InvoiceResource::make(Invoice::findOrfail($id));
         // print_r($invoice->items);
        $details= $invoice->items;
@@ -67,7 +74,9 @@ $content = DB::table('invoices')
         
       
         // Generate the PDF file.
-      $pdf = PDF::loadView('pdf.invoicetemplate', compact('invoice','details','customer','total','shop','content'));
+        
+        $pdf = PDF::loadView('pdf.invoicetemplate', compact('invoice','details','customer','total','shop','content'));
+       
 
         // Save the PDF file in the public storage.
        $pdf->save(storage_path('app/public/pdf/' . $fileName));
@@ -105,8 +114,29 @@ $content = DB::table('invoices')
         if (is_null($invoice)) {
             return $this->failed_response(message:'NoDataSend');
         }
+        // return $invoice;
+        // return $this->success_response(data: $invoice);
+         // Get the current date and time.
+         $dateTime = now();
 
-        return $this->success_response(data: $invoice);
+         // Generate a unique filename.
+         $fileName = $dateTime->format('YmdHis') . '_invoice.pdf';
+ 
+         
+       
+         // Generate the PDF file.
+       $pdf = PDF::loadView('pdf.reporttemplate', compact('invoice'));
+ 
+    //      // Save the PDF file in the public storage.
+        $pdf->save(storage_path('app/public/pdf/' . $fileName));
+ 
+    //      // // Get the file path.
+         $filePath = storage_path('app/public/pdf/' . $fileName);
+ 
+         // Return the file for download.
+          return response()->download($filePath, $fileName)->deleteFileAfterSend(true);
+        //   return view('pdf.reporttemplate', compact('invoice'));
+
     }
 
     

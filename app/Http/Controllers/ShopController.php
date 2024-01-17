@@ -21,7 +21,7 @@ class ShopController extends Controller
 
         $shop = Shops::where('user_id',  Auth::id())->first();
         if ($shop == null) {
-            return $this->failed_response(data: null, message: "Not_found");
+            return $this->failed_response(data: ["Not_found"=>"غير موجود"], message: "Not_found");
         }
         $imageUrl = asset('storage/uploads/' . $shop['image']);
         $shop['image'] = $imageUrl;

@@ -40,6 +40,7 @@ Route::middleware(['localization'])->group(function () {
         Route::post('logout',[AuthController::class, 'logout']);
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('customers', CustomerController::class);
+        Route::get('allcustomers', [CustomerController::class,"allcustomers"]);
         Route::apiResource('providers', ProviderController::class);
         Route::apiResource('products', ProductController::class);
         Route::get('aproducts', [ProductController::class,"getproducts"]);
@@ -51,7 +52,7 @@ Route::middleware(['localization'])->group(function () {
         Route::put("saveinvoice/{id}",[InvoicController::class,'save']);
         Route::apiResource('invoicesdetails', InvoiceDetailsController::class);
         Route::apiResource('users', UserController::class)->except(["store","destroy"]);
-        //Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
+        // Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
 
         
        

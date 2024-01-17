@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -18,6 +19,13 @@ class CustomerController extends Controller
     {
         $customers= Auth::user()->customers;
        
+        return $this->success_response(data: $customers);
+    }
+
+    public function allcustomers()
+    {
+        $user= Auth::user();
+        $customers=$user->customers()->withTrashed()->get();
         return $this->success_response(data: $customers);
     }
 
@@ -47,9 +55,12 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, int $id)
     {
-        //
+        
+        $customer= Customer::find($id)->update($request->all());
+        return $this->success_response(data: $$customer,message:"UpdateSuccessful");
+
     }
 
     /**
