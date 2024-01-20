@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use function PHPUnit\Framework\isNull;
@@ -68,6 +70,25 @@ class InvoicController extends Controller
         $invoice->save();
         return $this->success_response(data: $invoice,message:"UpdateSuccessful");
     }
+    public function salesToday()
+    {
+        $user=Auth::user();
+        $invoice= $user->invoices; 
+        if (is_null($invoice)) {
+            return $this->failed_response(message:"ُEmpty" );
+        }
+        $today = Carbon::today()->toDateString();
+        
+        $sumSales = Invoice::where('created_at', 'LIKE', $today . '%')->sum('total_amount');
+
+        // $sumSales=$invoice->where('created_at','=', $today)->sum("total_amount");
+        return $this->success_response(data: $sumSales,message:"Successful");
+
+        // $today = Carbon::today()->toDateString(); // Convert to a string in 'Y-m-d' format
+    
+    
+    }
+
 
     public function search(Request $request) {
         if (is_null($request->customer_id)) {

@@ -28,7 +28,7 @@ class Products extends Model
     {
         $this->quantity += $quantity;
         $this->buy = $buy;
-        $this->sell = $sell;
+        $this->sell = ($this->sell+$sell)/2;
 
         try {
 

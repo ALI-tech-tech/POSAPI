@@ -13,6 +13,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 
@@ -31,7 +32,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-
+Route::get('/linkstorage', function () { Artisan::call('storage:link'); });
+Route::get('/routecache', function () { Artisan::call('route:cache'); });
 Route::middleware(['localization'])->group(function () {
     Route::post('login',[AuthController::class, 'login'])->name('login');
     Route::post('signup',[AuthController::class, 'signup'])->name('signup');
@@ -52,14 +54,16 @@ Route::middleware(['localization'])->group(function () {
         Route::put("saveinvoice/{id}",[InvoicController::class,'save']);
         Route::apiResource('invoicesdetails', InvoiceDetailsController::class);
         Route::apiResource('users', UserController::class)->except(["store","destroy"]);
-        // Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
+        Route::get('/sales/today', [InvoicController::class, 'salesToday']);
+        Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
+        Route::get('/generate_report', [ReportController::class,"generate_report"]);
 
         
        
     }
     );
 });
-Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
+// Route::get('/invoicepdf/{id}', [ReportController::class,"generate_invoice"]);
 Route::get('/generate_report', [ReportController::class,"generate_report"]);
 
 

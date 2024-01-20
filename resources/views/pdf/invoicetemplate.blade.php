@@ -13,7 +13,8 @@
                     <tr>
                         <td valign='bottom' width='50%' height='50'>
                             <div align='left'>
-                                @if (!is_null($shop))
+                                @if (!is_null($shop['shop']))
+                                    
                                     <img src="{{ public_path('storage/uploads/' . $shop['shop']['image']) }}"
                                         style="width:80px;height:80px;" />
                                     {{-- <img src="http://10.3.122.3:8000/storage/uploads/1704617681_Screenshot%20(7).png" style="width:80px;height:80px;" /> --}}
@@ -26,11 +27,13 @@
                 </table><br /><br />
                 <table width='100%' cellspacing='0' cellpadding='0'>
                     <tr>
-                        @if (!is_null($shop))
+                        @if (!is_null($shop['shop']))
                             <td valign='top' width='35%' style='font-size:12px;'> <strong> متجر :
+
                                     {{ $shop['shop']['name'] }}</strong><br />
-                                الهاتف : {{ $shop['contact_number'] }}<br />
                                 العنوان: {{ $shop['shop']['address'] }}<br />
+
+                                الهاتف : {{ $shop['contact_number'] }}<br />
                                 البريد الالكتروني : {{ $shop['email'] }}<br />
                             </td>
                         @endif
@@ -69,6 +72,7 @@
                         <td colspan="*">
                     <tr>
                         {{-- @foreach ($invoice['items'] as $item) --}}
+                        @if(!is_null($content))
                         @foreach ($content as $item)
                             {{-- {{dd($invoice['items'])}} --}}
                             {{-- {{dd($details['items'])}} --}}
@@ -81,6 +85,7 @@
                         <td valign='top' style='font-size:12px;'>{{ $item->quantity * $item->unit_price }}</td>
                     </tr>
                     @endforeach
+                    @endif
 
 
         </tr>
@@ -118,20 +123,22 @@
     </table>
     <table width='100%' cellspacing='0' cellpadding='2'>
         <tr>
-            @if (!is_null($shop))
+            @if (!is_null($shop['shop']))
                 <td width='33%' style='border-top:double medium #CCCCCC;font-size:12px;' valign='top'>
                     <b>{{ $shop['shop']['name'] }}</b><br />
                 </td>
-                @endif
-                @if (!is_null($shop))
+            @endif
+            @if (!is_null($shop['shop']))
                 <td width='33%' style='border-top:double medium #CCCCCC; font-size:12px;' align='center'
                     valign='top'>
+
                     العنوان: {{ $shop['shop']['address'] }}<br />
+
                     الهاتف : {{ $shop['contact_number'] }} <br />
                     البريد الالكتروني : {{ $shop['email'] }}<br />
-                    @endif
-                </td>
-            
+            @endif
+            </td>
+
 
             <td valign='top' width='34%' style='border-top:double medium #CCCCCC;font-size:12px;'
                 align='right'><br />

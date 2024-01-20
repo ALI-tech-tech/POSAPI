@@ -59,7 +59,7 @@ class CustomerController extends Controller
     {
         
         $customer= Customer::find($id)->update($request->all());
-        return $this->success_response(data: $$customer,message:"UpdateSuccessful");
+        return $this->success_response(data: $customer,message:"UpdateSuccessful");
 
     }
 
